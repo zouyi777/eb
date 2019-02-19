@@ -15,7 +15,7 @@ public class User {
 	/**用户id*/
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
+	private long id;
 	
 	/**用户名*/
 	@Column(name="user_name", length=50, nullable=false)
@@ -25,12 +25,7 @@ public class User {
 	@Column(name="user_password", length=50, nullable=false)
     private String password;
 
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
+
     public String getUserName() {
         return userName;
     }
@@ -49,4 +44,10 @@ public class User {
         return "User [id=" + id + ", userName=" + userName + ", password="
                 + password + "]";
     }
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 }

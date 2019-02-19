@@ -15,15 +15,18 @@ public class Resource {
 	/**资源Id*/
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
+	private long id;
 	/**资源名*/
 	@Column(name="res_name",length=50,nullable=false)
 	private String resName;
 	
-	public Integer getId() {
+	@Column(name="role_id")
+	private long roleId;
+	
+	public long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getResName() {
@@ -31,5 +34,11 @@ public class Resource {
 	}
 	public void setResName(String resName) {
 		this.resName = resName;
+	}
+	public long getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(long roleId) {
+		this.roleId = roleId;
 	}
 }

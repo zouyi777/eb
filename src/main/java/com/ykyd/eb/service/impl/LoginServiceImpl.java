@@ -1,9 +1,10 @@
-package com.ykyd.eb.service;
+package com.ykyd.eb.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ykyd.eb.dao.UserDao;
+import com.ykyd.eb.service.LoginService;
 
 @Service
 public class LoginServiceImpl implements LoginService {
