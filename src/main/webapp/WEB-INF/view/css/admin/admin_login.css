@@ -1,0 +1,79 @@
+body {
+    background-color: darkcyan;
+}
+.login-form {
+    width: 380px;
+    height: 240px;
+    background-color: white;
+    border-radius: 5px;
+    /**固定在屏幕中央**/
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: auto;
+    /**固定在屏幕中央**/
+    text-align:center;
+    vertical-align:middle;
+}
+.login-title {
+    margin-top: 20px;
+}
+.login-title h3 {
+    font-size: 18px;
+    font-weight: 400;
+    font-style: normal;
+    color: darkcyan;
+}
+.login-form .username ,.password{
+    width: 300px;
+    height: 36px;
+    border: solid darkcyan 1px;
+    /**水平居中**/
+    position: relative;
+    left: 0px;
+    right: 0px;
+    margin:10px auto 0px auto;
+    /**水平居中**/
+}
+.login-form .username .icon,.password .icon {
+    color: #666;
+    font-size: 23px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+.login-form .username input,.password input {
+    width: 260px;
+    height: 36px;
+    margin-left: 5px;
+    /**取消input默认样式**/
+    background:none;
+    outline:none;
+    border:0px;
+    /**取消input默认样式**/
+}
+.login-form .btnlogin{
+    width: 300px;
+    height: 36px;
+    background-color:darkcyan ;
+    border-radius: 3px;
+    /**水平居中**/
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    margin:auto;
+    /**水平居中**/
+    bottom: 20px;
+}
+.login-form .btnlogin input {
+    width: 300px;
+    height: 36px;
+    font-size: 18px;
+    color: white;
+    /**取消input默认样式**/
+    background:none;
+    outline:none;
+    border:0px;
+    /**取消input默认样式**/
+}

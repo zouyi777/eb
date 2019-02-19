@@ -1,0 +1,54 @@
+.header {
+    height: 30px;
+    line-height: 30px;
+    padding: 0px 70px;
+}
+
+.header .login_register {
+    margin-left: 10px;
+}
+
+.nav {
+    height: 70px;
+    background-color: #2175BC;
+    padding: 0px 70px;
+    line-height: 70px;
+ }
+.nav img {
+    vertical-align: middle;
+}
+.nav ul {
+    float: right;
+}
+.nav ul li {
+    float: right;
+}
+.nav ul li a {
+    width:120px;
+    font-size: 16px;
+    color:#fff;
+    text-align: center;
+    display: block;
+}
+.nav ul li a:hover {
+    background-color: darkblue;
+}
+.nav ul li ul {
+    position: absolute;
+    display: none;
+}
+
+.nav ul li ul li {
+    float: none;
+}
+.nav ul li ul li a {
+    width:120px;
+    text-align: center;
+    display: block;
+    line-height: 50px;
+    background-color: #2175BC;
+}
+
+.nav ul li:hover ul{
+    display: block;
+}

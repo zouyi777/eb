@@ -1,0 +1,92 @@
+.top {
+    background-color: darkcyan;
+    height: 40px;
+    line-height: 40px;
+    padding: 0px  20px;
+}
+.top img {
+    vertical-align: middle;
+}
+.top .title {
+    color: white;
+    font-size: 17px;
+}
+.top .account {
+    float: right;
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.top .icon {
+    color: #fff;
+    font-size: 20px;
+}
+.top .account ul {
+    position: absolute;
+    top: 40px;
+    display: none;
+}
+
+.top .account ul li a{
+    width: 120px;
+    line-height: 40px;
+    text-align: center;
+    display: block;
+    color:#333;
+    background-color: #F1F3F4;
+}
+
+.top .account ul li a:hover{
+    background-color: #C1C1C1;
+}
+
+.top .account:hover ul {
+    display: block;
+}
+
+.left {
+    width: 10%;
+    height: 680px;
+    float: left;
+    background-color: cadetblue;
+    margin-top: 1px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.left ul li a {
+    display: block;
+    color: white;
+    line-height: 60px;
+    text-align: center;
+    font-size: 15px;
+    border-bottom: dotted #eee 1px;
+}
+.left ul li ul {
+    display: none;
+}
+.left ul li:hover ul {
+    display: block;
+}
+.left ul li ul li a {
+    display: block;
+	color:#333;
+    background-color: #F1F3F4;
+    line-height: 40px;
+    font-size: 13px;
+	border-bottom: dotted #333 1px;
+}
+
+.left ul li ul li a:hover {
+    background-color: #C1C1C1;
+}
+
+.right {
+    float: left;
+    width: 89.8%;
+    height: 680px;
+    background-color: white;
+    margin-top: 3px ;
+    margin-left: 0.2%;
+    border-top-left-radius: 7px;
+}
