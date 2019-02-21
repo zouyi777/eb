@@ -12,6 +12,6 @@ public class AdminHomeController {
 	
 	@RequestMapping(method=RequestMethod.GET)
     public String get(){  
-        return "admin/admin_home";
+        return "admin/home";
     }
 }

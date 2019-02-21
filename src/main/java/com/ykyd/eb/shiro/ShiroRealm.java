@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ykyd.eb.service.LoginService;
 
-public class MyShiroRealm extends AuthorizingRealm {
+public class ShiroRealm extends AuthorizingRealm {
 	
 	@Autowired
 	private LoginService loginService;

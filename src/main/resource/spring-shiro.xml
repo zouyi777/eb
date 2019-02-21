@@ -11,11 +11,12 @@
 		<!-- 登陆成功后的有页面 -->
 		<property name="successUrl" value="/admin/home" />
 		<!-- 配置未授权显示页面 -->
-		<property name="unauthorizedUrl" value="/admin/unauthorized" />
+		<property name="unauthorizedUrl" value="/unauthorized" />
 		<!-- 具体配置需要拦截哪些 URL, 以及访问对应的 URL 时使用 Shiro 的什么 Filter 进行拦截. -->
 		<property name="filterChainDefinitions">
 			<value>
-				/admin/** = authc
+			    /admin/login = authc
+			    /admin/home = authc,roles[admin]
 			</value>
 		</property>
 	</bean>
@@ -29,7 +30,7 @@
 		</property>
 	</bean>
 	<!-- 配置Realm 安全数据源-->
-	<bean id="myRealm" class="com.ykyd.eb.shiro.MyShiroRealm"/> 
+	<bean id="myRealm" class="com.ykyd.eb.shiro.ShiroRealm"/> 
 	<!-- 配置缓存管理器 -->
 	<!-- 
 	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
