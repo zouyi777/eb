@@ -10,7 +10,7 @@ import javax.persistence.Table;
 /**用户*/
 @Entity
 @Table(name="tb_user")
-public class User {
+public class UserEntity {
 	
 	/**用户id*/
 	@Id

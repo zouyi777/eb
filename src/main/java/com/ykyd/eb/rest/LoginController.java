@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ykyd.eb.entity.User;
+import com.ykyd.eb.entity.UserEntity;
 import com.ykyd.eb.service.LoginService;
 
 /** 
