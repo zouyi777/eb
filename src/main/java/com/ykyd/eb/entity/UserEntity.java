@@ -15,7 +15,7 @@ public class UserEntity {
 	/**用户id*/
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	/**用户名*/
 	@Column(name="user_name", length=50, nullable=false)
@@ -44,10 +44,10 @@ public class UserEntity {
         return "User [id=" + id + ", userName=" + userName + ", password="
                 + password + "]";
     }
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 }

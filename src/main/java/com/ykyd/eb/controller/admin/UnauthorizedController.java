@@ -1,4 +1,4 @@
-package com.ykyd.eb.rest.admin;
+package com.ykyd.eb.controller.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

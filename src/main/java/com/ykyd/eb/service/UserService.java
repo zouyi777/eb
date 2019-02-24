@@ -1,13 +1,13 @@
-package com.ykyd.eb.dao;
+package com.ykyd.eb.service;
 
 import com.ykyd.eb.entity.UserEntity;
 
 /**
- * UserDao接口
+ * UserService 接口
  * @author zouyi
  *
  */
-public interface UserDao extends BaseDao<UserEntity, Long> {
+public interface UserService extends BaseService<UserEntity, Long> {
 	/**
      * 根据用户名查找会员（忽略大小写）
      * @param username 用户名

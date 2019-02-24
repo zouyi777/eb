@@ -15,18 +15,18 @@ public class RoleEntity {
 	/**角色id*/
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private Long id;
 	/**角色名*/
 	@Column(name="role_name", length=50, nullable=false)
 	private String roleName;
 	
 	@Column(name="user_id")
-	private long userId;
+	private Long userId;
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getRoleName() {
@@ -35,10 +35,10 @@ public class RoleEntity {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

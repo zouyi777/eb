@@ -1,17 +1,17 @@
-package com.ykyd.eb.rest.admin;
+package com.ykyd.eb.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Controller("adminHomeController")
-@RequestMapping("/admin/home")
-public class AdminHomeController {
-	private static Logger log = Logger.getLogger(AdminHomeController.class);
+@Controller("indexController")
+@RequestMapping("/index")
+public class IndexController {
+	private static Logger log = Logger.getLogger(IndexController.class);
 	
 	@RequestMapping(method=RequestMethod.GET)
     public String get(){  
-        return "admin/home";
+        return "index";
     }
 }

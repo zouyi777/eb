@@ -30,7 +30,7 @@
 		</property>
 	</bean>
 	<!-- 配置Realm 安全数据源-->
-	<bean id="myRealm" class="com.ykyd.eb.shiro.ShiroRealm"/> 
+	<bean id="myRealm" class="com.ykyd.eb.ShiroRealm"/> 
 	<!-- 配置缓存管理器 -->
 	<!-- 
 	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
