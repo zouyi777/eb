@@ -1,5 +1,6 @@
 package com.ykyd.eb;
 
+
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,13 +16,17 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import com.ykyd.eb.entity.RoleEntity;
 import com.ykyd.eb.entity.UserEntity;
+import com.ykyd.eb.service.RoleService;
 import com.ykyd.eb.service.UserService;
 
 public class ShiroRealm extends AuthorizingRealm {
 	
 	@Resource
 	private UserService userService;
+	@Resource
+	private RoleService roleService;
 	/**
 	 * 获取账号授权信息
 	 */
@@ -29,28 +34,14 @@ public class ShiroRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		authorizationInfo.addRole("admin");
-//		for(int i=3;i<10;i++){
-//			UserEntity user = new UserEntity();
-//			user.setUserName("zy"+i);
-//			user.setPassword("123456");
-//			userService.save(user);
-//		}
-		UserEntity user = userService.findById(Long.valueOf(10));
-//		user.setPassword("123456789");
-//		userService.update(user);
-		userService.delete(userService.update(user));
-//		List<UserEntity> userList=userService.findAll();
-//		Pageable pageable = new Pageable();
-//		pageable.setPageNumber(2);
-//		pageable.setPageSize(3);
-//		
-//		Page<UserEntity> page=userService.findPage(pageable);
-//		List<UserEntity> userList = page.getDataList();
-//		for(UserEntity user : userList){
-//			System.out.println("id:"+user.getId()+" name:"+user.getUserName()+" password:"+user.getPassword());
-//		}
-//		System.out.print("总记录数："+page.getTotalCounts()+"总页数："+page.getTotalPages());
+		String username = (String)principals.getPrimaryPrincipal();
+		UserEntity userEntity=userService.findByUsername(username);
+		if(userEntity!=null){
+			List<RoleEntity> roleList= roleService.findRoleListByUserId(userEntity.getId());
+			for(RoleEntity roleEntity:roleList){
+				authorizationInfo.addRole(roleEntity.getRoleName());
+			}
+		}
 		return authorizationInfo;
 	}
 	/**

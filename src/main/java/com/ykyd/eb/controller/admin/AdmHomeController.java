@@ -5,10 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Controller("adminHomeController")
+@Controller("admHomeController")
 @RequestMapping("/admin/home")
-public class AdminHomeController {
-	private static Logger log = Logger.getLogger(AdminHomeController.class);
+public class AdmHomeController {
+	private static Logger log = Logger.getLogger(AdmHomeController.class);
 	
 	@RequestMapping(method=RequestMethod.GET)
     public String get(){  

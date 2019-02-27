@@ -16,7 +16,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 			    /adminlogin = authc
-			    /admin/** = authc,roles[admin]
+			    /admin/** = authc,roles[administrator]
 			</value>
 		</property>
 	</bean>
