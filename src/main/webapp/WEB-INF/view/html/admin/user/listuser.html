@@ -6,12 +6,25 @@
 </head>
 <body>
 用户列表
+<div id="content"></div>
 <script type="text/javascript" src="../../../js/jquery.js"></script>
 <script type="text/javascript">
 	$(function(){
-		$.get("http://localhost:8080/admin/user/listuser_data", function(result){
-		    $("body").html(result);
-		});
+		$.ajax({
+	        url:"http://localhost:8080/admin/user/listuser_data",
+	        type:"get",
+	        dataType:"json",
+	        contentType: "application/json",
+	        success:function(result){
+	        	//$("#content").html(result);
+	        	//alert(result);
+	        	//setTimeout(function(){
+	        		for(var i=0;i<result.length;i++){
+	        			$("#content").append(result[i].id + result[i].userName + result[i].password);
+	        		}
+	        	//},3000);
+	        }
+	    });
 	})
 </script>
 </body>
