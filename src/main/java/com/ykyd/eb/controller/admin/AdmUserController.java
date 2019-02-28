@@ -27,10 +27,6 @@ public class AdmUserController {
 	
 	@RequestMapping(value = "/add_user",method=RequestMethod.GET)
 	public String addUser(HttpServletRequest request){
-		Long currentUserId = (Long) SecurityUtils.getSubject().getSession().getAttribute("currentUserId"); 
-		System.out.println("通过SecurityUtils获取的用户id："+currentUserId);
-		Long currentUserId1 = (Long) request.getSession().getAttribute("currentUserId");
-		System.out.println("通过request获取的用户id："+currentUserId1);
 		return "admin/user/add_user";
 	}
 }

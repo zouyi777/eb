@@ -16,15 +16,15 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import com.ykyd.eb.entity.AdminEntity;
 import com.ykyd.eb.entity.RoleEntity;
-import com.ykyd.eb.entity.UserEntity;
+import com.ykyd.eb.service.AdminService;
 import com.ykyd.eb.service.RoleService;
-import com.ykyd.eb.service.UserService;
 
 public class ShiroRealm extends AuthorizingRealm {
 	
 	@Resource
-	private UserService userService;
+	private AdminService adminService;
 	@Resource
 	private RoleService roleService;
 	/**
@@ -34,14 +34,17 @@ public class ShiroRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		String username = (String)principals.getPrimaryPrincipal();
-		UserEntity userEntity=userService.findByUsername(username);
-		if(userEntity!=null){
-			List<RoleEntity> roleList= roleService.findRoleListByUserId(userEntity.getId());
-			for(RoleEntity roleEntity:roleList){
-				authorizationInfo.addRole(roleEntity.getRoleName());
+		Principal principal = (Principal)principals.getPrimaryPrincipal();
+		if(principal!=null){
+			AdminEntity adminEntity=adminService.findByUsername(principal.getUsername());
+			if(adminEntity!=null){
+				List<RoleEntity> roleList= roleService.findRoleListByUserId(adminEntity.getId());
+				for(RoleEntity roleEntity:roleList){
+					authorizationInfo.addRole(roleEntity.getRoleName());
+				}
 			}
 		}
+		Long id=adminService.getCurrentId();
 		return authorizationInfo;
 	}
 	/**
@@ -55,11 +58,11 @@ public class ShiroRealm extends AuthorizingRealm {
         //获取登录信息
         String  userName = token.getUsername();
         String password = String.valueOf(token.getPassword());
-        UserEntity userEntity=userService.findByUsername(userName);
-        if(userEntity!=null && userEntity.getPassword()!=null
-        		&& userEntity.getPassword().equals(password)){
+        AdminEntity adminEntity=adminService.findByUsername(userName);
+        if(adminEntity!=null && adminEntity.getPassword()!=null
+        		&& adminEntity.getPassword().equals(password)){
         	
-        	return new SimpleAuthenticationInfo(userName,password,getName());
+        	return new SimpleAuthenticationInfo(new Principal(adminEntity.getId(), userName),password,getName());
         }
         throw new UnauthenticatedException();
 	}

@@ -16,8 +16,14 @@
 		<property name="filterChainDefinitions">
 			<value>
 			    /adminlogin = authc
+			    /adminlogout = logout
 			    /admin/** = authc,roles[administrator]
 			</value>
+		</property>
+		<property name="filters">
+			<map>
+				<entry key="logout" value-ref="logoutFilter" />
+			</map>
 		</property>
 	</bean>
 	<!-- 配置SecurityManager安全管理 -->
@@ -39,4 +45,7 @@
 	 -->
 	<!-- 配置 Bean 后置处理器: 会自动的调用和 Spring 整合后各个组件的生命周期方法. -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
+   		<property name="redirectUrl" value="/adminlogin" />
+	</bean>
 </beans>

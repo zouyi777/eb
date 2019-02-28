@@ -9,9 +9,14 @@ import com.ykyd.eb.entity.UserEntity;
  */
 public interface UserService extends BaseService<UserEntity, Long> {
 	/**
-     * 根据用户名查找会员（忽略大小写）
+     * 根据用户名查找用户（忽略大小写）
      * @param username 用户名
      * @return 会员，若不存在则返回null
      */
 	UserEntity findByUsername(String username);
+	/**
+	 * 获取当前登录用户的Id
+	 *@return
+	 */
+	Long getCurrentId();
 }
