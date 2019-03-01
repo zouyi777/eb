@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ykyd.eb.Page;
+import com.ykyd.eb.Pageable;
 import com.ykyd.eb.entity.UserEntity;
 import com.ykyd.eb.service.UserService;
 
@@ -43,10 +45,13 @@ public class AdmUserController {
 	 * 获取用户列表数据
 	 *@return
 	 */
-	@RequestMapping(value="/listuser_data",method=RequestMethod.GET)
+	@RequestMapping(value="/listuser_page",method=RequestMethod.GET)
 	@ResponseBody
-    public List<UserEntity> listUserData(){
-        return userService.findAll();
+    public Page<UserEntity> listUserPage(){
+		Pageable pageable = new Pageable();
+		pageable.setPageNumber(1);
+		pageable.setPageSize(5);
+        return userService.findPage(pageable);
     }
 	
 }

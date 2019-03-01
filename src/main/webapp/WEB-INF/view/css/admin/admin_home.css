@@ -47,7 +47,7 @@
 
 .left {
     width: 10%;
-    height: 680px;
+    height: 600px;
     float: left;
     background-color: cadetblue;
     margin-top: 1px;
@@ -84,7 +84,7 @@
 .right {
     float: left;
     width: 89.8%;
-    height: 680px;
+    height: 600px;
     background-color: white;
     margin-top: 3px ;
     margin-left: 0.2%;

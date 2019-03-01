@@ -3,26 +3,104 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table tr {
+            width: 100%;
+            height: 40px;
+        }
+        table tr td {
+            text-align: center;
+        }
+        .page {
+            width: 256px;
+            height: 40px;
+            border: solid #333 1px;
+            border-radius: 5px;
+            line-height: 40px;
+            /**固定在屏幕底部**/
+            position: fixed;
+            left: 0px;
+            right: 0px;
+            bottom: 10px;
+            margin: auto;
+            /**固定在屏幕底部**/
+        }
+        .page a {
+            display: inline-block;
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-用户列表
-<div id="content"></div>
+<table border="1" id="table">
+    <tr>
+        <th>ID</th>
+        <th>用户名</th>
+        <th>密码</th>
+        <th>操作</th>
+    </tr>
+</table>
+<div class="page">
+    <a id="up_page" href="#">上一页</a>
+    <a id="cur_page">第1页</a>
+    <a id="total_page">共10页</a>
+    <a id="next_page" href="#">下一页</a>
+</div>
 <script type="text/javascript" src="../../../js/jquery.js"></script>
+<script src="../../../js/ucpm.js"></script>
+<script type="text/html" id="table_tr_tpl">
+    <% for(var i=0;i < this.length;i++){ %>
+        <% var obj = this[i]; %>
+        <tr>
+        	<td><%=obj.id %></td>
+        	<td><%=obj.userName %></td>
+        	<td><%=obj.password %></td>
+        	<td>删除</td>
+    	</tr>
+    <% } %>
+</script>
 <script type="text/javascript">
+	function renderData(result){
+	    var pendingHtml=$("#table_tr_tpl").html();
+	    var tpledHtml=ucpm.tpl(pendingHtml,result);
+	    $("#table").append(tpledHtml);
+	}
+	var $up_page =$("#up_page");
+    var $cur_page =$("#cur_page");
+    var $total_page =$("#total_page");
+    var $next_page =$("#next_page");
+    var cur_page=1;
+    $up_page.click(function(){
+        if(cur_page>1){
+            cur_page--;
+        }else{
+            alert("已经是第一页了");
+        }
+        $cur_page.text("第"+cur_page+"页");
+    });
+    $next_page.click(function(){
+        if(cur_page<10){
+            cur_page++;
+        }else{
+            alert("已经是最后一页了");
+        }
+        $cur_page.text("第"+cur_page+"页");
+    });
 	$(function(){
 		$.ajax({
-	        url:"http://localhost:8080/admin/user/listuser_data",
+	        url:"http://localhost:8080/admin/user/listuser_page",
 	        type:"get",
 	        dataType:"json",
 	        contentType: "application/json",
 	        success:function(result){
-	        	//$("#content").html(result);
-	        	//alert(result);
-	        	//setTimeout(function(){
-	        		for(var i=0;i<result.length;i++){
-	        			$("#content").append(result[i].id + result[i].userName + result[i].password);
-	        		}
-	        	//},3000);
+	        		renderData(result);
 	        }
 	    });
 	})
