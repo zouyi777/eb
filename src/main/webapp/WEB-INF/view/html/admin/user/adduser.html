@@ -3,8 +3,98 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" type="text/css" href="../../../css/common.css">
+    <style>
+        * {
+            font-size: 16px;
+        }
+        .title {
+            text-align: center;
+            height: 60px;
+            line-height: 60px;
+        }
+        .content {
+            width:500px;
+            height:400px;
+            /**1、DIV盒子水平居中*/
+            margin:auto;
+            /**DIV盒子水平居中*/
+            /**2、DIV盒子垂直居中
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            margin: auto;
+            */
+            /**3、DIV盒子水平垂直居中
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+            */
+            border: solid #999 1px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .content .hori_box {
+            width: 300px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border: solid #333333 1px;
+            border-radius: 5px;
+            /**DIV盒子水平居中*/
+            margin: 50px auto 0px auto;
+            /**DIV盒子水平居中*/
+        }
+        .content .hori_box input{
+            text-align: center;
+            /**取消input默认样式**/
+    		background:none;
+    		outline:none;
+    		border:0px;
+    		/**取消input默认样式**/
+        }
+        .bottom_btn {
+            width: 300px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background-color: #2175BC;
+            border-radius: 5px;
+            /**DIV盒子水平居中,在父元素底部*/
+            margin:auto;
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 30px;
+            /**DIV盒子水平居中*/
+        }
+        .bottom_btn input{
+            color: white;
+             /**取消input默认样式**/
+    		background:none;
+    		outline:none;
+    		border:0px;
+    		/**取消input默认样式**/
+        }
+    </style>
 </head>
 <body>
-新增用户
+<div class="title">
+    <h3>新增用户</h3>
+</div>
+<form class="content" method="post">
+    <div class="hori_box">
+        <input type="text" name="userName" placeholder="请输入账号">
+    </div>
+    <div class="hori_box">
+        <input type="text" name="password" placeholder="请输入密码">
+    </div>
+    <div class="bottom_btn">
+        <input type="submit" value="确  定">
+    </div>
+</form>
 </body>
 </html>

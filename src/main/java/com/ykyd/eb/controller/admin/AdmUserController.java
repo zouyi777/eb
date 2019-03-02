@@ -40,7 +40,20 @@ public class AdmUserController {
 	 *@return
 	 */
 	@RequestMapping(value = "/adduser",method=RequestMethod.GET)
-	public String addUser(HttpServletRequest request){
+	public String addUser(){
+		return "admin/user/adduser";
+	}
+	/**
+	 * 新增用户
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/adduser",method=RequestMethod.POST)
+	public String addUser(UserEntity user){
+		UserEntity  userEntity=userService.save(user);
+		if(userEntity!=null){
+			return "admin/user/listuser";
+		}
 		return "admin/user/adduser";
 	}
 	/**
