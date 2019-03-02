@@ -67,43 +67,56 @@
     <% } %>
 </script>
 <script type="text/javascript">
-	function renderData(result){
+	function renderData(head,result){
 	    var pendingHtml=$("#table_tr_tpl").html();
 	    var tpledHtml=ucpm.tpl(pendingHtml,result);
-	    $("#table").append(tpledHtml);
+	    if(head){
+	    	tpledHtml = head+tpledHtml;
+	    }
+	    $("#table").html(tpledHtml);
 	}
+	var tableHead = "<tr><th>ID</th><th>用户名</th><th>密码</th><th>操作</th></tr>";
 	var $up_page =$("#up_page");
     var $cur_page =$("#cur_page");
     var $total_page =$("#total_page");
     var $next_page =$("#next_page");
-    var cur_page=1;
+    var curPage=1;
+    var totalPage=0;
     $up_page.click(function(){
-        if(cur_page>1){
-            cur_page--;
+        if(curPage>1){
+        	curPage--;
+        	$cur_page.text("第"+curPage+"页");
+        	initData(curPage);
         }else{
             alert("已经是第一页了");
         }
-        $cur_page.text("第"+cur_page+"页");
     });
     $next_page.click(function(){
-        if(cur_page<10){
-            cur_page++;
+        if(curPage<totalPage){
+        	curPage++;
+        	$cur_page.text("第"+curPage+"页");
+        	initData(curPage);
         }else{
             alert("已经是最后一页了");
         }
-        $cur_page.text("第"+cur_page+"页");
     });
-	$(function(){
+    $(initData(curPage));
+	function initData(curPage){
 		$.ajax({
 	        url:"http://localhost:8080/admin/user/listuser_page",
 	        type:"get",
+	        data:{
+	        	pageNumber:curPage
+	        },
 	        dataType:"json",
 	        contentType: "application/json",
 	        success:function(result){
-	        		renderData(result);
+	        	totalPage = result.totalPages;
+	        	$total_page.text("共"+totalPage+"页");
+	        	renderData(tableHead,result.dataList);
 	        }
 	    });
-	})
+	}
 </script>
 </body>
 </html>

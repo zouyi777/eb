@@ -20,7 +20,9 @@ import com.ykyd.eb.service.UserService;
 @RequestMapping("/admin/user")
 public class AdmUserController {
 	private static Logger log = Logger.getLogger(AdmUserController.class);
-	
+	 /** 每页记录数 */
+    private static final int PAGE_SIZE = 10;
+    
 	@Resource
 	private UserService userService;
 	
@@ -47,10 +49,10 @@ public class AdmUserController {
 	 */
 	@RequestMapping(value="/listuser_page",method=RequestMethod.GET)
 	@ResponseBody
-    public Page<UserEntity> listUserPage(){
+    public Page<UserEntity> listUserPage(Integer pageNumber){
 		Pageable pageable = new Pageable();
-		pageable.setPageNumber(1);
-		pageable.setPageSize(5);
+		pageable.setPageNumber(pageNumber);
+		pageable.setPageSize(PAGE_SIZE);
         return userService.findPage(pageable);
     }
 	
