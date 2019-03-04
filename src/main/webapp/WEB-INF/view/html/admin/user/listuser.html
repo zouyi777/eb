@@ -64,15 +64,16 @@
 <script type="text/html" id="table_tr_tpl">
     <% for(var i=0;i < this.length;i++){ %>
         <% var obj = this[i]; %>
-        <tr>
+        <tr onclick="toDetail(<%=obj.id %>)">
         	<td><%=obj.id %></td>
         	<td><%=obj.userName %></td>
         	<td><%=obj.password %></td>
-        	<td>删除</td>
+        	<td><a onclick="deleteUser(<%=obj.id %>)" href="#" >删除</a></td>
     	</tr>
     <% } %>
 </script>
 <script type="text/javascript">
+    //模板渲染
 	function renderData(head,result){
 	    var pendingHtml=$("#table_tr_tpl").html();
 	    var tpledHtml=ucpm.tpl(pendingHtml,result);
@@ -107,6 +108,7 @@
         }
     });
     $(initData(curPage));
+    //从服务器获取初始数据
 	function initData(curPage){
 		$.ajax({
 	        url:"http://localhost:8080/admin/user/listuser_page",
@@ -122,6 +124,23 @@
 	        	renderData(tableHead,result.dataList);
 	        }
 	    });
+	}
+	
+	//删除单个用户
+	function deleteUser(id){
+		$.ajax({
+	        url:"http://localhost:8080/admin/user/delete/"+id,
+	        success:function(result){
+	        	if("success"==result){
+	        		initData(curPage);
+	        	}
+	        }
+	    });
+	}
+	
+	//穿透到详情
+	function toDetail(id){
+		window.location.href = "http://localhost:8080/admin/user/detail/"+id;
 	}
 </script>
 </body>

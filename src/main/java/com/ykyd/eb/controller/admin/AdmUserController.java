@@ -1,12 +1,11 @@
 package com.ykyd.eb.controller.admin;
 
-import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,5 +67,27 @@ public class AdmUserController {
 		pageable.setPageSize(PAGE_SIZE);
         return userService.findPage(pageable);
     }
+	
+	/**
+	 * 删除单个用户
+	 * @param Id
+	 * @return
+	 */
+	@RequestMapping(value="/delete/{id}")
+	@ResponseBody
+	public String deleteUser(@PathVariable Long id){
+		userService.delete(id);
+		return "success";
+	}
+	
+	/**
+	 * 获取用户详情视图
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/detail/{id}",method=RequestMethod.GET)
+	public String userDetail(@PathVariable Long id){
+		return "admin/user/detail";
+	}
 	
 }
