@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="../../../css/common.css">
     <style>
         * {
-            font-size: 16px;
+            font-size: 15px;
         }
         .title {
             text-align: center;
@@ -14,7 +14,7 @@
             line-height: 60px;
         }
         .content {
-            width:500px;
+            width:380px;
             height:400px;
             /**1、DIV盒子水平居中*/
             margin:auto;
@@ -39,29 +39,31 @@
         }
         .content .hori_box {
             width: 300px;
-            height: 50px;
-            line-height: 50px;
-            text-align: center;
-            border: solid #333333 1px;
-            border-radius: 5px;
+            height: 40px;
+            line-height: 40px;
             /**DIV盒子水平居中*/
             margin: 50px auto 0px auto;
             /**DIV盒子水平居中*/
         }
         .content .hori_box input{
-            text-align: center;
             /**取消input默认样式**/
     		background:none;
     		outline:none;
     		border:0px;
+    		display: inline-block;
+    		height: 25px;
+            line-height: 25px;
+    		border: solid #333333 1px;
+    		padding-left: 5px;
+    		padding-right: 5px;
     		/**取消input默认样式**/
         }
         .bottom_btn {
             width: 300px;
-            height: 50px;
-            line-height: 50px;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
-            background-color: #2175BC;
+            background-color: cadetblue;
             border-radius: 5px;
             /**DIV盒子水平居中,在父元素底部*/
             margin:auto;
@@ -70,6 +72,7 @@
             right: 0px;
             bottom: 30px;
             /**DIV盒子水平居中*/
+            display: none;
         }
         .bottom_btn input{
             color: white;
@@ -79,22 +82,132 @@
     		border:0px;
     		/**取消input默认样式**/
         }
+        .content .action {
+        	height:40px;
+        	background-color:cadetblue;
+        }
+        .content .action a{
+            display: inline-block;
+            height:40px;
+            width:50px;
+            line-height:40px;
+        	text-align:center;
+        	color:white;
+        }
+        .content .action .left{
+        	float:left;
+        	margin-left:31px;
+        }
+        .content .action .right{
+        	float:right;
+        	margin-right:31px;
+        }
     </style>
 </head>
 <body>
 <div class="title">
     <h3>用户信息</h3>
 </div>
-<form class="content" method="post">
-    <div class="hori_box">
-        <input type="text" name="userName" placeholder="请输入账号">
+<div class="content">
+    <div class="action">
+    	<a id="update" class="left" href="#">修改</a>
+    	<a id="delete" class="right" href="#">删除</a>
     </div>
     <div class="hori_box">
-        <input type="text" name="password" placeholder="请输入密码">
+    	<label>登录账号：</label>
+        <input type="text" id="username" readonly="readonly">
     </div>
-    <div class="bottom_btn">
+    <div class="hori_box">
+    	<label>登录密码：</label>
+        <input type="text" id="password" readonly="readonly">
+    </div>
+    <div id="btn_sure" class="bottom_btn">
         <input type="submit" value="确  定">
     </div>
-</form>
+</div>
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript">
+	var idUpdate=false;
+	$("#update").click(function(){
+		if(idUpdate){
+			displayView();
+		}else{
+			updateView();
+		}
+	});
+	
+	function displayView(){
+		$("#btn_sure").css("display","none");
+		$("#username").attr("readonly","readonly")//将input元素设置为readonly
+		$("#password").attr("readonly","readonly")//将input元素设置为readonly
+		idUpdate = false;
+	}
+	
+	function updateView(){
+		$("#btn_sure").css("display","block");
+		$("#username").removeAttr("readonly");//去除input元素的readonly属性
+		$("#password").removeAttr("readonly");//去除input元素的readonly属性
+		idUpdate = true;
+	}
+	//从服务器获取初始数据
+	function initData(){
+		//从本地缓存中获取用户的id，此id是用户列表点击的时候保存进来的
+		var userId = localStorage.getItem("listToDetailUserId");
+		$.ajax({
+	        url:"http://localhost:8080/admin/user/detail/"+userId,
+	        type:"get",
+	        dataType:"json",
+	        contentType: "application/json",
+	        success:function(result){
+	        	$("#username").val(result.userName);
+	        	$("#password").val(result.password);
+	        }
+	    });
+	}
+	$(initData());
+	
+	//修改数据
+	$("#btn_sure").click(function(){
+		//从本地缓存中获取用户的id，此id是用户列表点击的时候保存进来的
+		var userId = localStorage.getItem("listToDetailUserId");
+		var username=$("#username").val();
+		var password=$("#password").val();
+		$.ajax({
+	        url:"http://localhost:8080/admin/user/update",
+	        type:"post",
+	        data:{
+	        	id:userId,
+	        	username:username,
+	        	password:password
+	        },
+	        contentType: "application/x-www-form-urlencoded",
+	        success:function(result){
+	        	if("success"==result){
+	        		alert(result);
+	        		displayView();
+	        	}else{
+	        		alert(result);
+	        	}
+	        },
+	        error:function(error){
+	        	alert(error.responseText);
+	        }
+	    });
+	});
+	
+	//删除用户
+	$("#delete").click(function(){
+		//从本地缓存中获取用户的id，此id是用户列表点击的时候保存进来的
+		var userId = localStorage.getItem("listToDetailUserId");
+		$.ajax({
+	        url:"http://localhost:8080/admin/user/delete/"+userId,
+	        success:function(result){
+	        	if("success"==result){
+	        		window.location.href = "http://localhost:8080/admin/user/listuser";
+	        	}
+	        }
+	    });
+	});
+</script>
 </body>
 </html>

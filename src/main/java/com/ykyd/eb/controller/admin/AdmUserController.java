@@ -1,10 +1,13 @@
 package com.ykyd.eb.controller.admin;
 
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,9 +88,50 @@ public class AdmUserController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/detail/{id}",method=RequestMethod.GET)
-	public String userDetail(@PathVariable Long id){
+	@RequestMapping(value="/detail",method=RequestMethod.GET)
+	public String userDetail(){
 		return "admin/user/detail";
 	}
+	/**
+	 * 获取用户详情数据
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/detail/{id}",method=RequestMethod.GET)
+	@ResponseBody
+	public UserEntity userDetailData(@PathVariable Long id){
+		UserEntity user = userService.findById(id);
+		if(user!=null){
+			return user;
+		}
+		return null;
+	}
 	
+	/**
+	 * 获取用户详情数据
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/update",method=RequestMethod.POST)
+	@ResponseBody
+	public String userUpdate(Long id,String username,String password){
+		UserEntity user = userService.findById(id);
+		if(user!=null){
+//			if(StringUtils.isEmpty(param)){
+//				return "update fail:param can not empty !";
+//			}
+//			String username = (String) param.get("username");
+//			String password = (String) param.get("password");
+			if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
+				return "update fail:the username or  password can not empty !";
+			}
+			user.setUserName(username);
+			user.setPassword(password);
+			UserEntity updatedUser = userService.update(user);
+			if(updatedUser!=null){
+				return "success";
+			}
+		}
+		return "update fail:the user can not find !";
+	}
 }

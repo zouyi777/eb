@@ -140,7 +140,9 @@
 	
 	//穿透到详情
 	function toDetail(id){
-		window.location.href = "http://localhost:8080/admin/user/detail/"+id;
+		//将点击的每项user的id保存在本地，以便详情页面初始化的时候取出id到服务器端去获取这个用户的数据
+		localStorage.setItem("listToDetailUserId", id);
+		window.location.href = "http://localhost:8080/admin/user/detail";
 	}
 </script>
 </body>
