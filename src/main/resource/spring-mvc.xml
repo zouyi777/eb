@@ -35,4 +35,12 @@
     <mvc:resources mapping="/js/**" location="/WEB-INF/view/js/"/>
     <mvc:resources mapping="/fonts/**" location="/WEB-INF/view/fonts/"/>
     <mvc:resources mapping="/images/**" location="/WEB-INF/view/images/"/>
+    
+    <!-- 多部分文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	     <property name="maxUploadSize" value="104857600" />
+	     <property name="maxInMemorySize" value="4096" />
+	     <property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+    
 </beans>
