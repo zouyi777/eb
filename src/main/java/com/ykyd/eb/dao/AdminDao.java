@@ -12,5 +12,5 @@ public interface AdminDao extends BaseDao<AdminEntity, Long> {
      * @param username 用户名
      * @return 会员，若不存在则返回null
      */
-	AdminEntity findByUsername(String username);
+	AdminEntity findByAdminName(String adminName);
 }

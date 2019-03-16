@@ -2,12 +2,7 @@ package com.ykyd.eb.service.impl;
 
 
 import javax.annotation.Resource;
-
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
-
-import com.ykyd.eb.Principal;
 import com.ykyd.eb.dao.UserDao;
 import com.ykyd.eb.entity.UserEntity;
 import com.ykyd.eb.service.UserService;

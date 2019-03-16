@@ -2,9 +2,6 @@ package com.ykyd.eb.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -13,41 +10,33 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="tb_admin")
-public class AdminEntity {
-	/**用户id*/
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+public class AdminEntity extends BaseEntity{
 	
-	/**用户名*/
-	@Column(name="user_name", length=50, nullable=false)
-    private String userName;
+	/*** */
+	private static final long serialVersionUID = 8223534749483657464L;
+
+	/**管理员登录名*/
+	@Column(name="admin_name", length=50, nullable=false)
+    private String adminName;
 	
-	/**用户密码*/
-	@Column(name="user_password", length=50, nullable=false)
-    private String password;
+	/**管理员登录密码*/
+	@Column(name="admin_password", length=50, nullable=false)
+    private String adminPassword;
 
-	public Long getId() {
-		return id;
+	public String getAdminName() {
+		return adminName;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getAdminPassword() {
+		return adminPassword;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setAdminPassword(String adminPassword) {
+		this.adminPassword = adminPassword;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 }

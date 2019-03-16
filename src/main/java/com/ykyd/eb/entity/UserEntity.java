@@ -2,20 +2,15 @@ package com.ykyd.eb.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**用户*/
 @Entity
 @Table(name="tb_user")
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 	
-	/**用户id*/
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	/***/
+	private static final long serialVersionUID = -4768331502322895110L;
 	
 	/**用户名*/
 	@Column(name="user_name", length=50, nullable=false)
@@ -38,16 +33,4 @@ public class UserEntity {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", userName=" + userName + ", password="
-                + password + "]";
-    }
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 }

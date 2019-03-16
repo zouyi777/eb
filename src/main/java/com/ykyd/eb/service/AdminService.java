@@ -12,7 +12,7 @@ public interface AdminService extends BaseService<AdminEntity, Long> {
      * @param username 用户名
      * @return 会员，若不存在则返回null
      */
-	AdminEntity findByUsername(String username);
+	AdminEntity findByAdminName(String adminName);
 	/**
 	 * 获取当前登录管理员的Id
 	 *@return

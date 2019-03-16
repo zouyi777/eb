@@ -1,7 +1,10 @@
 package com.ykyd.eb.controller.admin;
 
 
+import java.util.Date;
+
 import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ykyd.eb.Page;
 import com.ykyd.eb.Pageable;
 import com.ykyd.eb.entity.UserEntity;
+import com.ykyd.eb.entity.UserInfoEntity;
+import com.ykyd.eb.service.UserInfoService;
 import com.ykyd.eb.service.UserService;
 
 @Controller("admUserController")
@@ -24,6 +29,9 @@ public class AdmUserController {
     
 	@Resource
 	private UserService userService;
+	
+	@Resource
+	private UserInfoService userInfoService;
 	
 	/**
 	 * 获取用户列表视图
@@ -49,9 +57,24 @@ public class AdmUserController {
 	 */
 	@RequestMapping(value = "/adduser",method=RequestMethod.POST)
 	public String addUser(UserEntity user){
+		user.setCreateDate(new Date());
+		user.setLastModifyDate(new Date());
 		UserEntity  userEntity=userService.save(user);
 		if(userEntity!=null){
-			return "admin/user/listuser";
+			UserInfoEntity userInfoEntity = new UserInfoEntity();
+			userInfoEntity.setUserId(userEntity.getId());
+			userInfoEntity.setCreateDate(new Date());
+			userInfoEntity.setLastModifyDate(new Date());
+			userInfoEntity.setAvatarPath("/upload/image/default_avatar.png");
+			userInfoEntity.setNickName("昵称"+System.currentTimeMillis());
+			userInfoEntity.setRealName("邹易");
+			userInfoEntity.setIdentityNo(System.currentTimeMillis()+"");
+			userInfoEntity.setPhoneNo(System.currentTimeMillis()+"");
+			userInfoEntity.setEmail("185964885@qq.com");
+			UserInfoEntity userInfoEntityResult = userInfoService.save(userInfoEntity);
+			if(userInfoEntityResult!=null){
+				return "admin/user/listuser";
+			}
 		}
 		return "admin/user/adduser";
 	}
@@ -61,11 +84,11 @@ public class AdmUserController {
 	 */
 	@RequestMapping(value="/listuser_page",method=RequestMethod.GET)
 	@ResponseBody
-    public Page<UserEntity> listUserPage(Integer pageNumber){
+    public Page<UserInfoEntity> listUserPage(Integer pageNumber){
 		Pageable pageable = new Pageable();
 		pageable.setPageNumber(pageNumber);
 		pageable.setPageSize(PAGE_SIZE);
-        return userService.findPage(pageable);
+        return userInfoService.findPage(pageable);
     }
 	
 	/**

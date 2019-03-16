@@ -48,8 +48,13 @@
 <table border="1" id="table">
     <tr>
         <th>ID</th>
-        <th>用户名</th>
-        <th>密码</th>
+        <th>头像</th>
+        <th>昵称</th>
+        <th>姓名</th>
+        <th>电话号码</th>
+        <th>邮箱</th>
+        <th>创建日期</th>
+        <th>最近修改日期</th>
         <th>操作</th>
     </tr>
 </table>
@@ -66,8 +71,13 @@
         <% var obj = this[i]; %>
         <tr onclick="toDetail(<%=obj.id %>)">
         	<td><%=obj.id %></td>
-        	<td><%=obj.userName %></td>
-        	<td><%=obj.password %></td>
+			<td><img src="<%=obj.avatarPath %>"></td>
+        	<td><%=obj.nickName %></td>
+        	<td><%=obj.realName %></td>
+        	<td><%=obj.phoneNo %></td>
+        	<td><%=obj.email %></td>
+        	<td><%=obj.createDate %></td>
+        	<td><%=obj.lastModifyDate %></td>
         	<td><a onclick="deleteUser(<%=obj.id %>)" href="#" >删除</a></td>
     	</tr>
     <% } %>
@@ -82,7 +92,7 @@
 	    }
 	    $("#table").html(tpledHtml);
 	}
-	var tableHead = "<tr><th>ID</th><th>用户名</th><th>密码</th><th>操作</th></tr>";
+	var tableHead = "<tr><th>ID</th><th>头像</th><th>昵称</th><th>姓名</th><th>电话号码</th><th>邮箱</th><th>创建日期</th><th>最近修改日期</th><th>操作</th></tr>";
 	var $up_page =$("#up_page");
     var $cur_page =$("#cur_page");
     var $total_page =$("#total_page");

@@ -25,10 +25,6 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminEntity, Long> impleme
     public void setBaseDao(AdminDao adminDao) {
         super.setBaseDao(adminDao);
     }
-	@Override
-	public AdminEntity findByUsername(String username) {
-		return adminDao.findByUsername(username);
-	}
 
 	@Override
 	public Long getCurrentId() {
@@ -40,6 +36,10 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminEntity, Long> impleme
 	        }
 		}
 		return null;
+	}
+	@Override
+	public AdminEntity findByAdminName(String adminName) {
+		return adminDao.findByAdminName(adminName);
 	}
 
 

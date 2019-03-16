@@ -36,7 +36,7 @@ public class ShiroRealm extends AuthorizingRealm {
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		Principal principal = (Principal)principals.getPrimaryPrincipal();
 		if(principal!=null){
-			AdminEntity adminEntity=adminService.findByUsername(principal.getUsername());
+			AdminEntity adminEntity=adminService.findByAdminName(principal.getUsername());
 			if(adminEntity!=null){
 				List<RoleEntity> roleList= roleService.findRoleListByUserId(adminEntity.getId());
 				for(RoleEntity roleEntity:roleList){
@@ -58,9 +58,9 @@ public class ShiroRealm extends AuthorizingRealm {
         //获取登录信息
         String  userName = token.getUsername();
         String password = String.valueOf(token.getPassword());
-        AdminEntity adminEntity=adminService.findByUsername(userName);
-        if(adminEntity!=null && adminEntity.getPassword()!=null
-        		&& adminEntity.getPassword().equals(password)){
+        AdminEntity adminEntity=adminService.findByAdminName(userName);
+        if(adminEntity!=null && adminEntity.getAdminPassword()!=null
+        		&& adminEntity.getAdminPassword().equals(password)){
         	
         	return new SimpleAuthenticationInfo(new Principal(adminEntity.getId(), userName),password,getName());
         }
