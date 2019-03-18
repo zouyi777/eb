@@ -2,7 +2,9 @@ package com.ykyd.eb.controller.admin;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ykyd.eb.Page;
 import com.ykyd.eb.Pageable;
-import com.ykyd.eb.bean.AvatarBean;
 import com.ykyd.eb.entity.UserEntity;
 import com.ykyd.eb.entity.UserInfoEntity;
 import com.ykyd.eb.enums.FileTypeEnum;
 import com.ykyd.eb.service.FileService;
 import com.ykyd.eb.service.UserInfoService;
 import com.ykyd.eb.service.UserService;
+import com.ykyd.eb.vo.AvatarVo;
+import com.ykyd.eb.vo.UserInfoVo;
 
 @Controller("admUserController")
 @RequestMapping("/admin/user")
@@ -92,11 +95,25 @@ public class AdmUserController {
 	 */
 	@RequestMapping(value="/listuser_page",method=RequestMethod.GET)
 	@ResponseBody
-    public Page<UserInfoEntity> listUserPage(Integer pageNumber){
+    public Page<UserInfoVo> listUserPage(Integer pageNumber){
 		Pageable pageable = new Pageable();
 		pageable.setPageNumber(pageNumber);
 		pageable.setPageSize(PAGE_SIZE);
-        return userInfoService.findPage(pageable);
+		
+		List<UserInfoVo> listUserInfoVo = new ArrayList<UserInfoVo>();
+		//查询用户信息
+		Page<UserInfoEntity> pageUserInfo = userInfoService.findPage(pageable);
+		List<UserInfoEntity> listUserInfo= pageUserInfo.getDataList();
+		//查询用户
+		Page<UserEntity> pageUser = userService.findPage(pageable);
+		List<UserEntity> listUser = pageUser.getDataList();
+		for(int i=0;i<listUserInfo.size();i++){
+			UserInfoVo userInfoVo = new UserInfoVo();
+			userInfoVo.setUserInfo(listUserInfo.get(i));
+			userInfoVo.setUser(listUser.get(i));
+			listUserInfoVo.add(userInfoVo);
+		}
+        return new Page<UserInfoVo>(pageable,listUserInfoVo,pageUserInfo.getTotalCounts());
     }
 	
 	/**
@@ -162,10 +179,10 @@ public class AdmUserController {
      *采用spring提供的上传文件的方法
      */
     @RequestMapping(value = "/upload_avatar",method=RequestMethod.POST)
-    public String  springUpload(Long avatarUserId,AvatarBean avatarBean,HttpServletRequest request) throws IllegalStateException, IOException{
-    	if(avatarBean.getAvatarFile()!=null){
-    		if(fileService.verify(FileTypeEnum.image, avatarBean.getAvatarFile())){
-    			String fileUploadPath = fileService.uploadLocal(FileTypeEnum.image,avatarBean.getAvatarFile());
+    public String  springUpload(Long avatarUserId,AvatarVo avatarVo,HttpServletRequest request) throws IllegalStateException, IOException{
+    	if(avatarVo.getAvatarFile()!=null){
+    		if(fileService.verify(FileTypeEnum.image, avatarVo.getAvatarFile())){
+    			String fileUploadPath = fileService.uploadLocal(FileTypeEnum.image,avatarVo.getAvatarFile());
     			System.out.println("文件保存位置："+fileUploadPath);
     			UserInfoEntity userInfo = userInfoService.findById(avatarUserId);
     			if(userInfo!=null){

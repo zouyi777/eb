@@ -48,6 +48,7 @@
 <table border="1" id="table">
     <tr>
         <th>ID</th>
+        <th>用户名</th>
         <th>头像</th>
         <th>昵称</th>
         <th>姓名</th>
@@ -69,16 +70,17 @@
 <script type="text/html" id="table_tr_tpl">
     <% for(var i=0;i < this.length;i++){ %>
         <% var obj = this[i]; %>
-        <tr onclick="toDetail(<%=obj.id %>)">
-        	<td><%=obj.id %></td>
-			<td><img style="width:50px;height:50px;" src="<%=obj.avatarPath %>"></td>
-        	<td><%=obj.nickName %></td>
-        	<td><%=obj.realName %></td>
-        	<td><%=obj.phoneNo %></td>
-        	<td><%=obj.email %></td>
-        	<td><%=obj.createDate %></td>
-        	<td><%=obj.lastModifyDate %></td>
-        	<td><a onclick="deleteUser(<%=obj.id %>)" href="#" >删除</a></td>
+        <tr onclick="toDetail(<%=obj.userInfo.id %>)">
+        	<td><%=obj.userInfo.id %></td>
+        	<td><%=obj.user.userName %></td>
+			<td><img style="width:50px;height:50px;" src="<%=obj.userInfo.avatarPath %>"></td>
+        	<td><%=obj.userInfo.nickName %></td>
+        	<td><%=obj.userInfo.realName %></td>
+        	<td><%=obj.userInfo.phoneNo %></td>
+        	<td><%=obj.userInfo.email %></td>
+        	<td><%=obj.userInfo.createDate %></td>
+        	<td><%=obj.userInfo.lastModifyDate %></td>
+        	<td><a onclick="deleteUser(<%=obj.userInfo.id %>)" href="#" >删除</a></td>
     	</tr>
     <% } %>
 </script>
@@ -92,7 +94,7 @@
 	    }
 	    $("#table").html(tpledHtml);
 	}
-	var tableHead = "<tr><th>ID</th><th>头像</th><th>昵称</th><th>姓名</th><th>电话号码</th><th>邮箱</th><th>创建日期</th><th>最近修改日期</th><th>操作</th></tr>";
+	var tableHead = "<tr><th>ID</th><th>用户名</th><th>头像</th><th>昵称</th><th>姓名</th><th>电话号码</th><th>邮箱</th><th>创建日期</th><th>最近修改日期</th><th>操作</th></tr>";
 	var $up_page =$("#up_page");
     var $cur_page =$("#cur_page");
     var $total_page =$("#total_page");

@@ -1,14 +1,14 @@
-package com.ykyd.eb.bean;
+package com.ykyd.eb.vo;
 
 import java.io.Serializable;
 
 import org.springframework.web.multipart.MultipartFile;
 /**
- * 头像
+ * 头像VO
  * @author zouyi
  *
  */
-public class AvatarBean implements Serializable {
+public class AvatarVo implements Serializable {
 	/**serialVersionUID*/
 	private static final long serialVersionUID = -3273466111721607012L;
 
