@@ -15,7 +15,7 @@
         }
         .content {
             width:380px;
-            height:400px;
+            height:450px;
             /**1、DIV盒子水平居中*/
             margin:auto;
             /**DIV盒子水平居中*/
@@ -41,8 +41,9 @@
             width: 300px;
             height: 40px;
             line-height: 40px;
+            text-align: center;
             /**DIV盒子水平居中*/
-            margin: 50px auto 0px auto;
+            margin: 10px auto 0px auto;
             /**DIV盒子水平居中*/
         }
         .content .hori_box input{
@@ -102,6 +103,16 @@
         	float:right;
         	margin-right:31px;
         }
+        .upload-avatar {
+            height: 30px;
+            margin: 10px auto 0px auto;
+            text-align: center;
+            display: none;
+        }
+        .upload-avatar .selectfile {
+            width: 200px;
+        }
+
     </style>
 </head>
 <body>
@@ -113,13 +124,29 @@
     	<a id="update" class="left" href="#">修改</a>
     	<a id="delete" class="right" href="#">删除</a>
     </div>
+	<div  class="hori_box" style="height:50px;line-height:50px;">
+		<img id="avatar" style="width:50px;height:50px;" src="#">
+	</div>
+    <form id="form_avatar" class="upload-avatar" method="post" action="/admin/user/upload_avatar"  enctype="multipart/form-data">
+        <input class="selectfile" type="file" name="avatarFile">
+        <input class="upload" type="submit" value="上传"/>
+        <input id="avatar_userId" type="hidden" name="avatarUserId" value=""/>
+    </form>
     <div class="hori_box">
-    	<label>登录账号：</label>
-        <input type="text" id="username" readonly="readonly">
+    	<label>昵称：</label>
+        <input type="text" id="nickName" readonly="readonly">
     </div>
     <div class="hori_box">
-    	<label>登录密码：</label>
-        <input type="text" id="password" readonly="readonly">
+    	<label>姓名：</label>
+        <input type="text" id="realName" readonly="readonly">
+    </div>
+    <div class="hori_box">
+        <label>手机：</label>
+        <input type="text" id="phoneNo" readonly="readonly">
+    </div>
+    <div class="hori_box">
+        <label>邮箱：</label>
+        <input type="text" id="email" readonly="readonly">
     </div>
     <div id="btn_sure" class="bottom_btn">
         <input type="submit" value="确  定">
@@ -128,6 +155,7 @@
 <script type="text/javascript" src="../../../js/jquery.js"></script>
 <script type="text/javascript">
 	var idUpdate=false;
+	var isAvatarUpdate=true;
 	$("#update").click(function(){
 		if(idUpdate){
 			displayView();
@@ -135,18 +163,31 @@
 			updateView();
 		}
 	});
-	
+
+    $("#avatar").click(function(){
+        if(isAvatarUpdate){
+            $("#form_avatar").css("display","block");
+            isAvatarUpdate = false;
+        }else{
+            $("#form_avatar").css("display","none");
+            isAvatarUpdate = true;
+        }
+    });
 	function displayView(){
 		$("#btn_sure").css("display","none");
-		$("#username").attr("readonly","readonly")//将input元素设置为readonly
-		$("#password").attr("readonly","readonly")//将input元素设置为readonly
+		$("#nickName").attr("readonly","readonly")//将input元素设置为readonly
+		$("#realName").attr("readonly","readonly")//将input元素设置为readonly
+		$("#phoneNo").attr("readonly","readonly")//将input元素设置为readonly
+		$("#email").attr("readonly","readonly")//将input元素设置为readonly
 		idUpdate = false;
 	}
 	
 	function updateView(){
 		$("#btn_sure").css("display","block");
-		$("#username").removeAttr("readonly");//去除input元素的readonly属性
-		$("#password").removeAttr("readonly");//去除input元素的readonly属性
+		$("#nickName").removeAttr("readonly");//去除input元素的readonly属性
+		$("#realName").removeAttr("readonly");//去除input元素的readonly属性
+		$("#phoneNo").removeAttr("readonly");//去除input元素的readonly属性
+		$("#email").removeAttr("readonly");//去除input元素的readonly属性
 		idUpdate = true;
 	}
 	//从服务器获取初始数据
@@ -159,8 +200,12 @@
 	        dataType:"json",
 	        contentType: "application/json",
 	        success:function(result){
-	        	$("#username").val(result.userName);
-	        	$("#password").val(result.password);
+	        	$("#avatar_userId").val(result.id);
+	        	$("#avatar").attr("src",result.avatarPath);
+	        	$("#nickName").val(result.nickName);
+	        	$("#realName").val(result.realName);
+	        	$("#phoneNo").val(result.phoneNo);
+	        	$("#email").val(result.email);
 	        }
 	    });
 	}
@@ -170,15 +215,19 @@
 	$("#btn_sure").click(function(){
 		//从本地缓存中获取用户的id，此id是用户列表点击的时候保存进来的
 		var userId = localStorage.getItem("listToDetailUserId");
-		var username=$("#username").val();
-		var password=$("#password").val();
+		var nickName=$("#nickName").val();
+		var realName=$("#realName").val();
+		var phoneNo=$("#phoneNo").val();
+		var email=$("#email").val();
 		$.ajax({
 	        url:"http://localhost:8080/admin/user/update",
 	        type:"post",
 	        data:{
 	        	id:userId,
-	        	username:username,
-	        	password:password
+                nickName:nickName,
+                realName:realName,
+                phoneNo:phoneNo,
+                email:email,
 	        },
 	        contentType: "application/x-www-form-urlencoded",
 	        success:function(result){

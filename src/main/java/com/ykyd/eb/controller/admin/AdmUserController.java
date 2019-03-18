@@ -1,9 +1,11 @@
 package com.ykyd.eb.controller.admin;
 
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -15,8 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ykyd.eb.Page;
 import com.ykyd.eb.Pageable;
+import com.ykyd.eb.bean.AvatarBean;
 import com.ykyd.eb.entity.UserEntity;
 import com.ykyd.eb.entity.UserInfoEntity;
+import com.ykyd.eb.enums.FileTypeEnum;
+import com.ykyd.eb.service.FileService;
 import com.ykyd.eb.service.UserInfoService;
 import com.ykyd.eb.service.UserService;
 
@@ -32,6 +37,9 @@ public class AdmUserController {
 	
 	@Resource
 	private UserInfoService userInfoService;
+	
+	@Resource
+    private FileService fileService;
 	
 	/**
 	 * 获取用户列表视图
@@ -119,16 +127,16 @@ public class AdmUserController {
 	 */
 	@RequestMapping(value="/detail/{id}",method=RequestMethod.GET)
 	@ResponseBody
-	public UserEntity userDetailData(@PathVariable Long id){
-		UserEntity user = userService.findById(id);
-		if(user!=null){
-			return user;
+	public UserInfoEntity userDetailData(@PathVariable Long id){
+		UserInfoEntity userInfo = userInfoService.findById(id);
+		if(userInfo!=null){
+			return userInfo;
 		}
 		return null;
 	}
 	
 	/**
-	 * 获取用户详情数据
+	 * 修改用户
 	 * @param id
 	 * @return
 	 */
@@ -137,11 +145,6 @@ public class AdmUserController {
 	public String userUpdate(Long id,String username,String password){
 		UserEntity user = userService.findById(id);
 		if(user!=null){
-//			if(StringUtils.isEmpty(param)){
-//				return "update fail:param can not empty !";
-//			}
-//			String username = (String) param.get("username");
-//			String password = (String) param.get("password");
 			if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
 				return "update fail:the username or  password can not empty !";
 			}
@@ -154,4 +157,23 @@ public class AdmUserController {
 		}
 		return "update fail:the user can not find !";
 	}
+	
+	/*
+     *采用spring提供的上传文件的方法
+     */
+    @RequestMapping(value = "/upload_avatar",method=RequestMethod.POST)
+    public String  springUpload(Long avatarUserId,AvatarBean avatarBean,HttpServletRequest request) throws IllegalStateException, IOException{
+    	if(avatarBean.getAvatarFile()!=null){
+    		if(fileService.verify(FileTypeEnum.image, avatarBean.getAvatarFile())){
+    			String fileUploadPath = fileService.uploadLocal(FileTypeEnum.image,avatarBean.getAvatarFile());
+    			System.out.println("文件保存位置："+fileUploadPath);
+    			UserInfoEntity userInfo = userInfoService.findById(avatarUserId);
+    			if(userInfo!=null){
+    				userInfo.setAvatarPath(fileUploadPath);
+    				userInfoService.update(userInfo);
+    			}
+    		}
+    	}
+    return "admin/user/detail"; 
+    }
 }

@@ -58,7 +58,7 @@ public class FileServiceImpl implements FileService {
             return null;
         }
 		//上传根目录
-		String uploadPath = "upload";
+		String uploadPath = "/upload";
 		if (fileType == FileTypeEnum.image) {
             uploadPath =uploadPath+"/image/";
         } else if(fileType == FileTypeEnum.file){
