@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -61,6 +62,17 @@ public class AdmUserController {
 	public String addUser(){
 		return "admin/user/adduser";
 	}
+	
+	/**
+	 * 获取用户详情视图
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/detail",method=RequestMethod.GET)
+	public String userDetail(){
+		return "admin/user/detail";
+	}
+	
 	/**
 	 * 新增用户
 	 * @param user
@@ -124,19 +136,16 @@ public class AdmUserController {
 	@RequestMapping(value="/delete/{id}")
 	@ResponseBody
 	public String deleteUser(@PathVariable Long id){
-		userService.delete(id);
+		UserInfoEntity  userInfoEntity  = userInfoService.findById(id);
+		if(userInfoEntity!=null){
+			Long userId = userInfoEntity.getUserId();
+			userService.delete(userId);//先删除User实体
+			userInfoService.delete(id);//再删除UserInfo实体
+		}
 		return "success";
 	}
 	
-	/**
-	 * 获取用户详情视图
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value="/detail",method=RequestMethod.GET)
-	public String userDetail(){
-		return "admin/user/detail";
-	}
+	
 	/**
 	 * 获取用户详情数据
 	 * @param id
@@ -144,10 +153,17 @@ public class AdmUserController {
 	 */
 	@RequestMapping(value="/detail/{id}",method=RequestMethod.GET)
 	@ResponseBody
-	public UserInfoEntity userDetailData(@PathVariable Long id){
+	public UserInfoVo userDetailData(@PathVariable Long id){
 		UserInfoEntity userInfo = userInfoService.findById(id);
 		if(userInfo!=null){
-			return userInfo;
+			Long userId= userInfo.getUserId();
+			UserEntity  userEntity = userService.findById(userId);
+			if(userEntity!=null){
+				UserInfoVo userInfoVo = new UserInfoVo();
+				userInfoVo.setUser(userEntity);
+				userInfoVo.setUserInfo(userInfo);
+				return userInfoVo;
+			}
 		}
 		return null;
 	}
@@ -159,17 +175,32 @@ public class AdmUserController {
 	 */
 	@RequestMapping(value="/update",method=RequestMethod.POST)
 	@ResponseBody
-	public String userUpdate(Long id,String username,String password){
-		UserEntity user = userService.findById(id);
-		if(user!=null){
-			if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
-				return "update fail:the username or  password can not empty !";
-			}
-			user.setUserName(username);
-			user.setPassword(password);
-			UserEntity updatedUser = userService.update(user);
-			if(updatedUser!=null){
-				return "success";
+	public String userUpdate(@RequestBody UserInfoVo userInfoVo){
+		if(userInfoVo!=null){
+			UserInfoEntity userInfo = userInfoVo.getUserInfo();
+			if(userInfo!=null){
+				UserInfoEntity userInfoEntity=userInfoService.findById(userInfo.getId());
+				userInfoEntity.setNickName(userInfo.getNickName());
+				userInfoEntity.setRealName(userInfo.getRealName());
+				userInfoEntity.setIdentityNo(userInfo.getIdentityNo());
+				userInfoEntity.setPhoneNo(userInfo.getPhoneNo());
+				userInfoEntity.setEmail(userInfo.getEmail());
+				userInfoEntity.setLastModifyDate(new Date());
+				
+				UserEntity user = userInfoVo.getUser();
+				if(user!=null){
+					UserEntity userEntity = userService.findById(userInfoEntity.getUserId());
+					userEntity.setUserName(user.getUserName());
+					userEntity.setPassword(user.getPassword());
+					userEntity.setLastModifyDate(new Date());
+					
+					UserInfoEntity updatedUserInfo = userInfoService.update(userInfoEntity);
+					UserEntity updatedUser = userService.update(userEntity);
+					if(updatedUserInfo !=null && updatedUser!=null){
+						return "success";
+					}
+				}
+				
 			}
 		}
 		return "update fail:the user can not find !";

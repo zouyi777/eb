@@ -1,5 +1,6 @@
 package com.ykyd.eb.service;
 
+import com.ykyd.eb.Principal;
 import com.ykyd.eb.entity.UserEntity;
 
 /**
@@ -15,8 +16,19 @@ public interface UserService extends BaseService<UserEntity, Long> {
      */
 	UserEntity findByUsername(String username);
 	/**
+	 * 判断用户是否已登录
+	 *@return
+	 */
+	boolean authorized();
+	/**
 	 * 获取当前登录用户的Id
 	 *@return
 	 */
 	Long getCurrentId();
+	/**
+     * 获取当前身份信息
+     * 
+     * @return 身份信息，不存在时返回NULL
+     */
+	Principal getCurrentPrincipal();
 }

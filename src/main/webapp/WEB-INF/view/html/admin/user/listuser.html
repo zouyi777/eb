@@ -144,7 +144,7 @@
 	        url:"http://localhost:8080/admin/user/delete/"+id,
 	        success:function(result){
 	        	if("success"==result){
-	        		initData(curPage);
+	        		window.location.href = "http://localhost:8080/admin/user/listuser";
 	        	}
 	        }
 	    });

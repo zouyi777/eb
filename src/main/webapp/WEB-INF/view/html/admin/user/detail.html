@@ -15,7 +15,7 @@
         }
         .content {
             width:380px;
-            height:450px;
+            height:520px;
             /**1、DIV盒子水平居中*/
             margin:auto;
             /**DIV盒子水平居中*/
@@ -71,7 +71,7 @@
             position: absolute;
             left: 0px;
             right: 0px;
-            bottom: 30px;
+            bottom: 10px;
             /**DIV盒子水平居中*/
             display: none;
         }
@@ -133,19 +133,31 @@
         <input id="avatar_userId" type="hidden" name="avatarUserId" value=""/>
     </form>
     <div class="hori_box">
-    	<label>昵称：</label>
+    	<label>用户名：</label>
+        <input type="text" id="userName" readonly="readonly">
+    </div>
+    <div class="hori_box">
+    	<label>密   码：</label>
+        <input type="text" id="password" readonly="readonly">
+    </div>
+    <div class="hori_box">
+    	<label>昵   称：</label>
         <input type="text" id="nickName" readonly="readonly">
     </div>
     <div class="hori_box">
-    	<label>姓名：</label>
+    	<label>姓   名：</label>
         <input type="text" id="realName" readonly="readonly">
     </div>
     <div class="hori_box">
-        <label>手机：</label>
+    	<label>身份证：</label>
+        <input type="text" id="identityNo" readonly="readonly">
+    </div>
+    <div class="hori_box">
+        <label>手   机：</label>
         <input type="text" id="phoneNo" readonly="readonly">
     </div>
     <div class="hori_box">
-        <label>邮箱：</label>
+        <label>邮   箱：</label>
         <input type="text" id="email" readonly="readonly">
     </div>
     <div id="btn_sure" class="bottom_btn">
@@ -175,8 +187,11 @@
     });
 	function displayView(){
 		$("#btn_sure").css("display","none");
+		$("#userName").attr("readonly","readonly")//将input元素设置为readonly
+		$("#password").attr("readonly","readonly")//将input元素设置为readonly
 		$("#nickName").attr("readonly","readonly")//将input元素设置为readonly
 		$("#realName").attr("readonly","readonly")//将input元素设置为readonly
+		$("#identityNo").attr("readonly","readonly")//将input元素设置为readonly
 		$("#phoneNo").attr("readonly","readonly")//将input元素设置为readonly
 		$("#email").attr("readonly","readonly")//将input元素设置为readonly
 		idUpdate = false;
@@ -184,8 +199,11 @@
 	
 	function updateView(){
 		$("#btn_sure").css("display","block");
+		$("#userName").removeAttr("readonly");//去除input元素的readonly属性
+		$("#password").removeAttr("readonly");//去除input元素的readonly属性
 		$("#nickName").removeAttr("readonly");//去除input元素的readonly属性
 		$("#realName").removeAttr("readonly");//去除input元素的readonly属性
+		$("#identityNo").removeAttr("readonly");//去除input元素的readonly属性
 		$("#phoneNo").removeAttr("readonly");//去除input元素的readonly属性
 		$("#email").removeAttr("readonly");//去除input元素的readonly属性
 		idUpdate = true;
@@ -200,12 +218,15 @@
 	        dataType:"json",
 	        contentType: "application/json",
 	        success:function(result){
-	        	$("#avatar_userId").val(result.id);
-	        	$("#avatar").attr("src",result.avatarPath);
-	        	$("#nickName").val(result.nickName);
-	        	$("#realName").val(result.realName);
-	        	$("#phoneNo").val(result.phoneNo);
-	        	$("#email").val(result.email);
+	        	$("#avatar_userId").val(result.userInfo.id);
+	        	$("#avatar").attr("src",result.userInfo.avatarPath);
+	        	$("#userName").val(result.user.userName);
+	        	$("#password").val(result.user.password);
+	        	$("#nickName").val(result.userInfo.nickName);
+	        	$("#realName").val(result.userInfo.realName);
+	        	$("#identityNo").val(result.userInfo.identityNo);
+	        	$("#phoneNo").val(result.userInfo.phoneNo);
+	        	$("#email").val(result.userInfo.email);
 	        }
 	    });
 	}
@@ -214,22 +235,35 @@
 	//修改数据
 	$("#btn_sure").click(function(){
 		//从本地缓存中获取用户的id，此id是用户列表点击的时候保存进来的
-		var userId = localStorage.getItem("listToDetailUserId");
+		var userInfoId = localStorage.getItem("listToDetailUserId");
+		var userName=$("#userName").val();
+		var password=$("#password").val();
 		var nickName=$("#nickName").val();
 		var realName=$("#realName").val();
+		var identityNo=$("#identityNo").val();
 		var phoneNo=$("#phoneNo").val();
 		var email=$("#email").val();
+		
+		var params = {};
+		params.user={
+				userName:userName,
+        		password:password
+		};
+		params.userInfo ={
+				id:userInfoId,
+        		nickName:nickName,
+                realName:realName,
+                identityNo:identityNo,
+                phoneNo:phoneNo,
+                email:email
+		};
+		var jsonParams = JSON.stringify(params);
 		$.ajax({
 	        url:"http://localhost:8080/admin/user/update",
 	        type:"post",
-	        data:{
-	        	id:userId,
-                nickName:nickName,
-                realName:realName,
-                phoneNo:phoneNo,
-                email:email,
-	        },
-	        contentType: "application/x-www-form-urlencoded",
+	        data:jsonParams,
+	        datatype:"json", //此处不能省略 
+	    	contentType: "application/json; charset=utf-8",//此处不能省略
 	        success:function(result){
 	        	if("success"==result){
 	        		alert(result);
