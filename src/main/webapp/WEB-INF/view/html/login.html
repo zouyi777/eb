@@ -6,9 +6,55 @@
 </head>
 <body>
     <form method="post">
-        用户名：<input type="text" name="username"><br>
-        密码：<input type="text" name="password"><br>
-        <input type="submit" value="登陆">
+                         用户名：<input id="username" type="text" name="username"><br>
+       	 密码：<input id="password" type="text" name="password"><br>
+        <input id="btnlogin" type="button" value="登陆">
     </form>
 </body>
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/rsa/jsbn.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/prng4.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/rng.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/rsa.min.js"></script>
+<script type="text/javascript" src="../../../js/base64.min.js"></script>
+<script type="text/javascript">
+	//RSA加密对象
+    var rsaKey = new RSAKey();
+	//初始化获取公钥
+	$(function (){
+		$.ajax({
+	        url:"http://localhost:8080/login/get_publicKey",
+	        type:"get",
+	        dataType:"json",
+	        contentType: "application/json",
+	        success:function(result){
+	        	//通过模数和指数向rsaKey设置公钥
+	        	rsaKey.setPublic(b64tohex(result.modulus), b64tohex(result.exponent));
+	        }
+	    });
+	});
+	//点击登录
+	$("#btnlogin").click(function(){
+		$.ajax({
+	        url:"http://localhost:8080/login",
+	        data: {
+				username: $("#username").val(),
+				password: hex2b64(rsaKey.encrypt($("#password").val()))
+			},
+	        type:"post",
+	        success:function(result){
+	        	console.log(result);
+	        	if("success"==result){
+	        		window.location.href = "http://localhost:8080/account";
+	        	}else{
+	        		alert(result);
+	        	}
+	        },
+	        error: function(result) {
+				console.log(result);
+				alert(result);
+			}
+	    });
+	});
+</script>
 </html>

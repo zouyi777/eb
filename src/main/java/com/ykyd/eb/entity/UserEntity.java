@@ -3,6 +3,7 @@ package com.ykyd.eb.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
 import com.ykyd.eb.interceptor.UserInterceptor;
 
 /**用户*/
@@ -15,7 +16,10 @@ public class UserEntity extends BaseEntity {
 	
 	/** “身份信息”参数名称 */
     public static final String PRINCIPAL_ATTR_NAME = UserInterceptor.class.getName() + ".PRINCIPAL";
-	
+    
+    /** “密钥”参数 */
+    public static final String RSA_KEY = "RSA_KEY";
+    
 	/**用户名*/
 	@Column(name="user_name", length=50, nullable=false)
     private String userName;

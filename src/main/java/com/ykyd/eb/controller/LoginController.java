@@ -1,18 +1,26 @@
 package com.ykyd.eb.controller;
 
+import java.security.interfaces.RSAPublicKey;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ykyd.eb.Principal;
 import com.ykyd.eb.entity.UserEntity;
+import com.ykyd.eb.service.RSAService;
 import com.ykyd.eb.service.UserService;
+import com.ykyd.eb.vo.LoginVo;
 
 /** 
  * 前台用户登陆
@@ -25,17 +33,40 @@ public class LoginController {
 	
 	@Resource
 	private UserService userService;
-
+	
+	@Resource
+    private RSAService rsaService;
+	
     @RequestMapping(method=RequestMethod.GET)
     public String get(){  //用来返回一个页面
         return "login";
     }
+    
+    /**
+     * 获取公钥
+     *@param request
+     *@return
+     */
+    @RequestMapping(value="/get_publicKey",method=RequestMethod.GET)
+    @ResponseBody
+    public Map<String,String> getPublicKey(HttpServletRequest request){
+    	Map<String,String> map = new HashMap<String,String>();
+    	//生成公钥
+    	RSAPublicKey publicKey = rsaService.generateKey(request);
+    	map.put("modulus", Base64.encodeBase64String(publicKey.getModulus().toByteArray()));
+    	map.put("exponent", Base64.encodeBase64String(publicKey.getPublicExponent().toByteArray()));
+		return map;
+    }
 
     @RequestMapping(method=RequestMethod.POST)
-    public String post(String username,String password,HttpServletRequest request, HttpServletResponse response){  //用来处理用户的登陆请求
-    	log.info("用户名："+username+"   密码："+username);
-    	UserEntity userEntity=userService.findByUsername(username);
-        if(userEntity!=null && userEntity.getPassword()!=null && userEntity.getPassword().equals(password)){
+    @ResponseBody
+    public String post(LoginVo loginVo,HttpServletRequest request, HttpServletResponse response){  //用来处理用户的登陆请求
+    	log.info("用户名："+loginVo.getUsername()+"   密码："+loginVo.getPassword());
+    	UserEntity userEntity=userService.findByUsername(loginVo.getUsername());
+    	//解密密码，并重新设置到loginVo
+    	String decryptPassword = rsaService.decryptParameter("password", request);
+    	loginVo.setPassword(decryptPassword);
+        if(userEntity!=null && userEntity.getPassword()!=null && userEntity.getPassword().equals(loginVo.getPassword())){
         	HttpSession session = request.getSession();
         	// 判断会员是否已登录
         	if (userService.authorized()) {
@@ -43,8 +74,8 @@ public class LoginController {
             }
         	//将用户信息保存在session中
         	session.setAttribute(UserEntity.PRINCIPAL_ATTR_NAME, new Principal(userEntity.getId(), userEntity.getUserName()));
-        	return "redirect:/account";
+        	return "success";
         }
-        return "login";
+        return "error";
     }
 }
