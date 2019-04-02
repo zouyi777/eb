@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,9 @@ public class LoginController {
     	//解密密码，并重新设置到loginVo
     	String decryptPassword = rsaService.decryptParameter("password", request);
     	loginVo.setPassword(decryptPassword);
-        if(userEntity!=null && userEntity.getPassword()!=null && userEntity.getPassword().equals(loginVo.getPassword())){
+    	//用MD5加密一下，以便和数据中的密码做对比
+    	String md5Password = DigestUtils.md5Hex(loginVo.getPassword());
+        if(userEntity!=null && userEntity.getPassword()!=null && userEntity.getPassword().equals(md5Password)){
         	HttpSession session = request.getSession();
         	// 判断会员是否已登录
         	if (userService.authorized()) {

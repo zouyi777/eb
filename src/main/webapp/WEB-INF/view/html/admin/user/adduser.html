@@ -87,14 +87,60 @@
 </div>
 <form class="content" method="post">
     <div class="hori_box">
-        <input type="text" name="userName" placeholder="请输入账号">
+        <input id="username"  type="text" name="userName" placeholder="请输入账号">
     </div>
     <div class="hori_box">
-        <input type="text" name="password" placeholder="请输入密码">
+        <input id="password" type="text" name="password" placeholder="请输入密码">
     </div>
     <div class="bottom_btn">
-        <input type="submit" value="确  定">
+        <input id="btnSure" type="button" value="确  定">
     </div>
 </form>
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/rsa/jsbn.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/prng4.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/rng.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/rsa.min.js"></script>
+<script type="text/javascript" src="../../../js/base64.min.js"></script>
+<script type="text/javascript">
+	//RSA加密对象
+    var rsaKey = new RSAKey();
+	//初始化获取公钥
+	$(function (){
+		$.ajax({
+	        url:"http://localhost:8080/rsa/publicKey",
+	        type:"get",
+	        dataType:"json",
+	        contentType: "application/json",
+	        success:function(result){
+	        	//通过模数和指数向rsaKey设置公钥
+	        	rsaKey.setPublic(b64tohex(result.modulus), b64tohex(result.exponent));
+	        }
+	    });
+	});
+	//点击登录
+	$("#btnSure").click(function(){
+		$.ajax({
+	        url:"http://localhost:8080/admin/user/adduser",
+	        data: {
+	        	userName: $("#username").val(),
+				password: hex2b64(rsaKey.encrypt($("#password").val()))
+			},
+	        type:"post",
+	        success:function(result){
+	        	console.log(result);
+	        	if("success"==result){
+	        		window.location.href = "http://localhost:8080/admin/user/listuser";
+	        	}else{
+	        		alert(result);
+	        	}
+	        },
+	        error: function(result) {
+				console.log(result);
+				alert(result);
+			}
+	    });
+	});
+</script>
 </body>
 </html>

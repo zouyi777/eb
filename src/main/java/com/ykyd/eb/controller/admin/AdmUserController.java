@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -24,6 +25,7 @@ import com.ykyd.eb.entity.UserEntity;
 import com.ykyd.eb.entity.UserInfoEntity;
 import com.ykyd.eb.enums.FileTypeEnum;
 import com.ykyd.eb.service.FileService;
+import com.ykyd.eb.service.RSAService;
 import com.ykyd.eb.service.UserInfoService;
 import com.ykyd.eb.service.UserService;
 import com.ykyd.eb.vo.AvatarVo;
@@ -44,6 +46,9 @@ public class AdmUserController {
 	
 	@Resource
     private FileService fileService;
+	
+	@Resource
+    private RSAService rsaService;
 	
 	/**
 	 * 获取用户列表视图
@@ -79,7 +84,13 @@ public class AdmUserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/adduser",method=RequestMethod.POST)
-	public String addUser(UserEntity user){
+	@ResponseBody
+	public String addUser(UserEntity user,HttpServletRequest request){
+		//解密密码，并重新设置到user
+    	String decryptPassword = rsaService.decryptParameter("password", request);
+    	user.setPassword(decryptPassword);
+		//密码保存到数据库时，使用MD5加密
+		user.setPassword(DigestUtils.md5Hex(user.getPassword()));
 		user.setCreateDate(new Date());
 		user.setLastModifyDate(new Date());
 		UserEntity  userEntity=userService.save(user);
@@ -96,10 +107,10 @@ public class AdmUserController {
 			userInfoEntity.setEmail("185964885@qq.com");
 			UserInfoEntity userInfoEntityResult = userInfoService.save(userInfoEntity);
 			if(userInfoEntityResult!=null){
-				return "admin/user/listuser";
+				return "success";
 			}
 		}
-		return "admin/user/adduser";
+		return "error";
 	}
 	/**
 	 * 获取用户列表数据
