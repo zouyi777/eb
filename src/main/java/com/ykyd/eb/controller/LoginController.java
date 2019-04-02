@@ -1,15 +1,10 @@
 package com.ykyd.eb.controller;
 
-import java.security.interfaces.RSAPublicKey;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,22 +35,6 @@ public class LoginController {
     @RequestMapping(method=RequestMethod.GET)
     public String get(){  //用来返回一个页面
         return "login";
-    }
-    
-    /**
-     * 获取公钥
-     *@param request
-     *@return
-     */
-    @RequestMapping(value="/get_publicKey",method=RequestMethod.GET)
-    @ResponseBody
-    public Map<String,String> getPublicKey(HttpServletRequest request){
-    	Map<String,String> map = new HashMap<String,String>();
-    	//生成公钥
-    	RSAPublicKey publicKey = rsaService.generateKey(request);
-    	map.put("modulus", Base64.encodeBase64String(publicKey.getModulus().toByteArray()));
-    	map.put("exponent", Base64.encodeBase64String(publicKey.getPublicExponent().toByteArray()));
-		return map;
     }
 
     @RequestMapping(method=RequestMethod.POST)
