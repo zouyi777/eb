@@ -89,7 +89,7 @@ public class AdmUserController {
 		//解密密码，并重新设置到user
     	String decryptPassword = rsaService.decryptParameter("password", request);
     	user.setPassword(decryptPassword);
-		//密码保存到数据库时，使用MD5加密
+		//使用MD5加密
 		user.setPassword(DigestUtils.md5Hex(user.getPassword()));
 		user.setCreateDate(new Date());
 		user.setLastModifyDate(new Date());

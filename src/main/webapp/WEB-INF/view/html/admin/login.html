@@ -15,16 +15,62 @@
     <form method="post">
         <div class="username">
             <i class="icon iconfont icon-ICONbiaozhun_fuzhi-37"></i>
-            <input type="text" name="username" placeholder="请输入账号">
+            <input id="username" type="text" name="username" placeholder="请输入账号">
         </div>
         <div class="password">
             <i class=" icon iconfont icon-ICONbiaozhun_fuzhi-40"></i>
-            <input type="text" name="password" placeholder="请输入密码">
+            <input id="password" type="text" name="password" placeholder="请输入密码">
         </div>
         <div class="btnlogin">
-            <input type="submit" value="登  录">
+            <input id="btnLogin" type="button" value="登  录">
         </div>
     </form>
 </div>
+<script type="text/javascript" src="../../../js/jquery.js"></script>
+<script type="text/javascript" src="../../../js/rsa/jsbn.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/prng4.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/rng.min.js"></script>
+<script type="text/javascript" src="../../../js/rsa/rsa.min.js"></script>
+<script type="text/javascript" src="../../../js/base64.min.js"></script>
+<script type="text/javascript">
+	//RSA加密对象
+    var rsaKey = new RSAKey();
+	//初始化获取公钥
+	$(function (){
+		$.ajax({
+	        url:"http://localhost:8080/rsa/publicKey",
+	        type:"get",
+	        dataType:"json",
+	        contentType: "application/json",
+	        success:function(result){
+	        	//通过模数和指数向rsaKey设置公钥
+	        	rsaKey.setPublic(b64tohex(result.modulus), b64tohex(result.exponent));
+	        }
+	    });
+	});
+	//点击登录
+	$("#btnLogin").click(function(){
+		$.ajax({
+	        url:"http://localhost:8080/adminlogin",
+	        data: {
+	        	username: $("#username").val(),
+				password: hex2b64(rsaKey.encrypt($("#password").val()))
+			},
+	        type:"post",
+	        success:function(result){
+	        	console.log(result);
+	        	if("success"==result){
+	        		window.location.href = "http://localhost:8080/admin/home";
+	        	}else{
+	        		alert(result);
+	        	}
+	        },
+	        error: function(result) {
+	        	console.log(result);
+				alert(result);
+			}
+	    });
+	});
+</script>
 </body>
 </html>
